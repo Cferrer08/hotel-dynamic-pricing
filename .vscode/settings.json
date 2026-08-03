@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5433,
+            "driver": "PostgreSQL",
+            "name": "SET search_path TO pricing;  -- A single night's booking curve SELECT lead_time, rate, rooms_booked, rooms_on_books FROM vw_booking_analysis WHERE hotel_id='HTL001' AND room_type_id='RT_STD' AND stay_date='2025-10-15' ORDER BY lead_time DESC LIMIT 15;  -- RevPAR by hotel: the metric hotels actually optimize SELECT hotel_name,        ROUND(SUM(room_revenue)/NULLIF(SUM(rooms_booked),0), 2) AS adr,        ROUND(SUM(rooms_booked)::numeric/(COUNT(DISTINCT stay_date)*MAX(rooms_available)), 3) AS occupancy,        ROUND(SUM(room_revenue)/(COUNT(DISTINCT stay_date)*MAX(rooms_available)), 2) AS revpar FROM vw_booking_analysis WHERE stay_date <= '2026-07-30' GROUP BY hotel_name ORDER BY revpar DESC;",
+            "database": "hotel_pricing",
+            "username": "hotel_admin"
+        }
+    ]
+}

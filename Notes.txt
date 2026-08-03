@@ -1,0 +1,42 @@
+Activate environment:
+
+.\.venv\Scripts\Activate.ps1
+______________________________________________________________________
+DOCKER COMMANDS:
+
+Command			What it does
+docker compose up -d	start
+docker compose stop	stop, keep data
+docker compose down	remove container, keep data
+docker compose down -v	delete the data too — use when you want a clean rebuild
+
+______________________________________________________________________
+generate_dimensions.py Creates the dimensions tables from the HOTEL:
+
+  dim_hotel.csv             5 rows
+  dim_room_type.csv         3 rows
+  dim_capacity.csv         15 rows
+  dim_date.csv            789 rows
+  dim_event.csv            68 rows
+
+Total rooms across portfolio : 960
+Matches dim_hotel total      : True
+Stay dates                   : 789 (2024-08-01 -> 2026-09-28)
+Open (unsold) stay dates     : 60
+
+______________________________________________________________________
+
+generate_facts.py Creates the facts tables from the HOTEL:
+
+fact_booking_pickup.parquet     682,650 rows
+fact_competitor_rate.parquet    682,650 rows
+_ground_truth_elasticity.csv         15 rows
+
+Total rooms sold        : 590,094
+Total revenue           : $172,102,478
+Rate-test share of rows : 12.5%
+Oversold night-types    : 0  (must be 0)
+Mean occupancy (closed) : 76.8%
+Censored (sold-out) rows: 1.2%
+
+____________________________________________________________________________

@@ -1,0 +1,31 @@
+# Core data
+pandas
+numpy
+pyarrow
+Faker
+
+# Database
+SQLAlchemy
+psycopg2-binary
+python-dotenv
+
+# Modeling
+scikit-learn
+statsmodels
+xgboost
+catboost
+shap
+
+# Visualization
+matplotlib
+seaborn
+plotly
+
+# App layer
+streamlit
+fastapi
+uvicorn
+
+# Notebooks
+jupyterlab
+ipykernel
