@@ -1,0 +1,6 @@
+specification,mean_elasticity,MAE_vs_truth
+1. Poisson | rate tests | available rows  [PREFERRED],-1.503,0.13
+2. log-OLS dropping zero-pickup rows,-0.518,0.953
+3. Keeping censored (sold-out) rows,-0.932,0.538
+"4. Observational data, no rate tests",-0.412,1.059
+5. PLACEBO: fake randomization on legacy rates,1.197,2.667

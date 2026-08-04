@@ -226,12 +226,17 @@ def add_momentum(df: pd.DataFrame) -> pd.DataFrame:
              .sort_values(["hotel_id", "booking_date"]))
 
     grouped = daily.groupby("hotel_id")["hotel_daily_pickup"]
+    # min_periods=1 so the first few days of data use whatever history
+    # exists rather than becoming NaN. The shift(1) still guarantees no
+    # leakage; only the very first booking date has no prior day at all.
     daily["momentum_7d"] = (grouped.shift(1)
-                            .rolling(7, min_periods=3).mean()
+                            .rolling(7, min_periods=1).mean()
                             .reset_index(level=0, drop=True))
     daily["momentum_28d"] = (grouped.shift(1)
-                             .rolling(28, min_periods=7).mean()
+                             .rolling(28, min_periods=1).mean()
                              .reset_index(level=0, drop=True))
+    for col in ["momentum_7d", "momentum_28d"]:
+        daily[col] = daily[col].fillna(0.0)
     daily["momentum_ratio"] = (daily["momentum_7d"]
                                / daily["momentum_28d"].clip(lower=0.1))
 
@@ -353,6 +358,10 @@ def leakage_checks(df: pd.DataFrame) -> pd.DataFrame:
     # only if a combination never appeared in train.
     missing = df["typical_occ_on_books"].isna().mean()
     check("pace baseline coverage", missing < 0.01, f"missing={missing:.3%}")
+
+    n_missing = df[FEATURES_PREDICTIVE].isna().sum().sum()
+    check("no missing values in features", n_missing == 0,
+          f"missing={n_missing}")
 
     check("no infinities",
           not np.isinf(df.select_dtypes(include=[np.number])).to_numpy().any())

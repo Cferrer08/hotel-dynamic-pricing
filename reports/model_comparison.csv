@@ -1,0 +1,5 @@
+model,fit_seconds,MAE,RMSE,poisson_deviance,bias,night_MAE,night_MAPE,occupancy_MAE_pp
+Poisson GLM,7.9,0.6631,1.0227,0.9472,0.0049,9.117,0.306,19.887
+Random Forest,23.0,0.6123,0.9492,0.8432,-0.0,5.428,0.185,11.759
+XGBoost,7.4,0.6102,0.945,0.8379,0.0022,5.436,0.19,12.137
+CatBoost,44.5,0.6115,0.9489,0.84,0.0009,5.586,0.186,11.982
