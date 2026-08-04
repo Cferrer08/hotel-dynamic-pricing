@@ -1,0 +1,7 @@
+specification,mean_estimate,MAE_vs_truth
+A. price + lead time,-1.331,0.244
+B. + competitor rate (valid),-1.503,0.13
+C. + occupancy_on_books (POST-TREATMENT),-1.462,0.155
+D. + pace_gap (POST-TREATMENT),-1.095,0.414
+E. + all pace features (POST-TREATMENT),-1.302,0.251
+TRUE VALUE,-1.471,0.0
