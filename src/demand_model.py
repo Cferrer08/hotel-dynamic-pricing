@@ -1,5 +1,4 @@
 """
-Phase 5a - Demand forecasting model.
 
 Predicts `rooms_booked` for a (hotel, room_type, stay_date, booking_date)
 cell using all 36 predictive features, including the pace features that
@@ -19,8 +18,6 @@ Output:
     models/demand_model.pkl
     reports/model_comparison.csv
 
-Run from the project root:
-    python src/demand_model.py
 """
 
 import time
@@ -76,12 +73,6 @@ def prepare(df: pd.DataFrame):
 # Metrics
 # ==========================================================================
 def poisson_deviance(y_true, y_pred) -> float:
-    """The right loss for count data.
-
-    MAE and RMSE treat an error of 2 as identical whether the truth was 1
-    or 100. Poisson deviance scales the penalty with the expected count,
-    which matches how counts actually behave.
-    """
     y_true = np.asarray(y_true, dtype=float)
     y_pred = np.clip(np.asarray(y_pred, dtype=float), 1e-9, None)
     with np.errstate(divide="ignore", invalid="ignore"):
@@ -101,13 +92,7 @@ def cell_metrics(y_true, y_pred) -> dict:
 
 
 def night_metrics(frame: pd.DataFrame, y_pred) -> dict:
-    """Accuracy at the level the business actually cares about.
 
-    Nobody manages a single (stay_date, booking_date) cell. They manage a
-    NIGHT. Summing predictions to the stay-date level lets independent
-    per-cell errors cancel, and this is the number a revenue manager would
-    judge the model on.
-    """
     tmp = frame[["hotel_id", "room_type_id", "stay_date",
                  TARGET, "rooms_available"]].copy()
     tmp["pred"] = np.asarray(y_pred, dtype=float)
@@ -186,17 +171,7 @@ def train_all(splits) -> tuple:
 # The point of this notebook: a great forecaster is a bad pricer
 # ==========================================================================
 def price_response_curve(model, splits, rate_grid=None) -> pd.DataFrame:
-    """Ask the demand model what happens when we change price.
 
-    We take real test rows, sweep the rate while holding everything else
-    fixed, and record predicted demand. This is a partial dependence plot
-    on the treatment variable.
-
-    The model has never been told that price CAUSES demand. It only learned
-    that in the training data, high rates accompany high demand - because
-    the legacy rule set them that way. So this curve shows the association
-    the model absorbed, not the causal effect.
-    """
     X_test, _, frame = splits["test"]
     rate_grid = rate_grid if rate_grid is not None else np.linspace(0.7, 1.4, 15)
 

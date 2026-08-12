@@ -1,5 +1,5 @@
 """
-Phase 4 - Feature engineering.
+Feature engineering.
 
 Builds the modelling table from the warehouse, with two guarantees:
 
@@ -13,8 +13,7 @@ Builds the modelling table from the warehouse, with two guarantees:
 Output:
     data/processed/features.parquet
 
-Run from the project root:
-    python src/features.py
+
 """
 
 from pathlib import Path

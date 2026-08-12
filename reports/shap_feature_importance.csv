@@ -1,0 +1,49 @@
+feature,label,mean_abs_shap,mean_shap,category
+typical_pickup,Typical demand for this night/lead time,1.0104569,-0.6276129,pace / demand history
+occupancy_on_books,Occupancy on the books,0.11843101,-0.10799345,pace / demand history
+rooms_on_books,Rooms already sold,0.08515299,-0.056650985,pace / demand history
+pickup_lag_7d,Bookings last 7 days,0.079313286,-0.049441487,pace / demand history
+rooms_available,Room type capacity,0.050130147,-0.014276838,calendar / hotel
+rooms_remaining,Rooms still available,0.043421123,-0.036261193,pace / demand history
+rate_vs_comp,Rate vs competitors,0.040523775,0.013141476,price
+pickup_lag_3d,Bookings last 3 days,0.024746818,-0.008420203,pace / demand history
+typical_occ_on_books,Typical occupancy at this lead time,0.024024539,-0.0041328683,pace / demand history
+pct_remaining,% of inventory unsold,0.012515318,-0.010694092,pace / demand history
+pace_ratio,Pace ratio vs normal,0.0117110135,-0.0028225272,pace / demand history
+rate_vs_base,Rate vs reference rate,0.010357541,0.0015419855,price
+log_rate,Our rate,0.01013262,-0.0022764574,price
+lead_time,Days before arrival,0.007890722,-0.003111995,calendar / hotel
+doy_cos,Doy cos,0.007177121,0.0044176728,calendar / hotel
+leisure_share,Hotel leisure mix,0.0069301683,-0.00015770004,calendar / hotel
+log_comp_rate,Competitor rate level,0.0065553696,0.001964885,price
+pace_gap_dow,Pace vs normal for this weekday,0.0062058214,0.0022381903,pace / demand history
+pace_gap,Pace vs normal,0.00540945,0.00012864274,pace / demand history
+base_rate,Reference rate,0.0035246299,-0.0017992192,calendar / hotel
+momentum_7d,"Hotel booking activity, last 7 days",0.0034871604,7.766603e-05,pace / demand history
+momentum_ratio,Booking activity trend,0.003202952,-0.00031638573,pace / demand history
+doy_sin,Doy sin,0.0030226577,-0.0019180886,calendar / hotel
+stay_days_until_holiday,Days until next holiday,0.0029883734,-0.00033572208,calendar / hotel
+momentum_28d,"Hotel booking activity, last 28 days",0.0029096592,-0.000727484,pace / demand history
+event_lift,Event demand lift,0.001866828,-3.384473e-05,calendar / hotel
+room_type_id_RT_STD,Room type: RT_STD,0.0017591087,-0.00019002706,hotel & room identity
+stay_dow,Stay dow,0.0015287787,0.000111347865,calendar / hotel
+stay_week,Stay week,0.0012882528,-0.00034662872,calendar / hotel
+dow_sin,Dow sin,0.0012282415,0.00017226195,calendar / hotel
+hotel_id_HTL005,Hotel: HTL005,0.00094266405,-9.255901e-06,hotel & room identity
+stay_month,Stay month,0.00089061406,0.00022824632,calendar / hotel
+dow_cos,Dow cos,0.0008740546,-7.2236135e-06,calendar / hotel
+pickup_lag_1d,Bookings yesterday,0.0008193716,0.00010649234,pace / demand history
+segment_Leisure,Segment: Leisure,0.00076355925,0.0001424276,hotel & room identity
+stay_is_weekend,Weekend night,0.0007218684,-2.598031e-05,calendar / hotel
+star_rating,Star rating,0.00048504828,-5.6102945e-05,calendar / hotel
+has_event,City event on this date,0.00040857872,-1.4771613e-05,calendar / hotel
+city_Denver,City: Denver,0.00024758442,-2.2291491e-05,hotel & room identity
+stay_is_holiday,Public holiday,0.00020879421,2.808256e-06,calendar / hotel
+hotel_id_HTL004,Hotel: HTL004,0.000110254536,2.646247e-05,hotel & room identity
+segment_Mixed,Segment: Mixed,4.8716174e-05,7.127048e-06,hotel & room identity
+room_type_id_RT_STE,Room type: RT_STE,3.468345e-05,4.6876057e-06,hotel & room identity
+hotel_id_HTL002,Hotel: HTL002,2.127796e-05,2.2393122e-06,hotel & room identity
+hotel_id_HTL003,Hotel: HTL003,0.0,0.0,hotel & room identity
+city_Chicago,City: Chicago,0.0,0.0,hotel & room identity
+city_Miami,City: Miami,0.0,0.0,hotel & room identity
+city_New York,City: New York,0.0,0.0,hotel & room identity
