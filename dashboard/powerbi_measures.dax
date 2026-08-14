@@ -1,0 +1,254 @@
+// ===========================================================================
+// Dynamic Pricing Intelligence Platform - DAX measures
+//
+// Paste each measure into Power BI: Modeling > New Measure.
+// Create them in a dedicated "_Measures" table (Home > Enter Data, name it
+// _Measures, delete the placeholder column) so they group together in the
+// field list instead of scattering across fact tables.
+//
+// THE RULE THAT MATTERS: never average a stored ratio. Divide a summed
+// numerator by a summed denominator. In this dataset, averaging the stored
+// occupancy column instead of computing SUM/SUM is wrong by up to 4.3
+// percentage points at hotel level - a visible, wrong number on a slide.
+// ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// 1. CORE REVENUE MEASURES
+// ---------------------------------------------------------------------------
+
+Baseline Revenue =
+SUM ( fact_recommendation[baseline_revenue] )
+
+Optimized Revenue =
+SUM ( fact_recommendation[expected_revenue] )
+
+Revenue Uplift =
+[Optimized Revenue] - [Baseline Revenue]
+
+// DIVIDE(), not "/". DIVIDE handles division by zero by returning BLANK
+// instead of an error, which matters when a slicer produces an empty subset.
+Revenue Uplift % =
+DIVIDE ( [Revenue Uplift], [Baseline Revenue] )
+
+Baseline Profit =
+SUM ( fact_recommendation[baseline_profit] )
+
+Optimized Profit =
+SUM ( fact_recommendation[expected_profit] )
+
+Profit Uplift =
+[Optimized Profit] - [Baseline Profit]
+
+Cost of Inaction =
+SUM ( fact_recommendation[cost_of_inaction] )
+
+
+// ---------------------------------------------------------------------------
+// 2. OCCUPANCY AND CAPACITY  -- the averaging trap lives here
+// ---------------------------------------------------------------------------
+
+Capacity =
+SUM ( fact_recommendation[capacity] )
+
+Rooms On Books =
+SUM ( fact_recommendation[rooms_on_books_now] )
+
+// CORRECT: sum of rooms over sum of capacity.
+Occupancy On Books =
+DIVIDE ( [Rooms On Books], [Capacity] )
+
+// WRONG - kept here as a teaching reference, do NOT use in visuals.
+// This averages 885 per-night ratios, giving every night equal weight
+// regardless of how many rooms it has. A 13-room suite counts the same as
+// a 154-room standard block.
+//   Occupancy WRONG = AVERAGE ( fact_recommendation[baseline_occupancy] )
+
+Expected Occupancy =
+DIVIDE (
+    SUMX ( fact_recommendation,
+           fact_recommendation[final_occupancy] * fact_recommendation[capacity] ),
+    [Capacity]
+)
+
+Occupancy Gain pp =
+( [Expected Occupancy] - [Occupancy On Books] ) * 100
+
+
+// ---------------------------------------------------------------------------
+// 3. HISTORICAL PERFORMANCE  (fact_history)
+// ---------------------------------------------------------------------------
+
+Rooms Sold =
+SUM ( fact_history[rooms_sold] )
+
+Room Revenue =
+SUM ( fact_history[revenue] )
+
+Historical Capacity =
+SUM ( fact_history[capacity] )
+
+// ADR - average daily rate. Revenue per room SOLD.
+ADR =
+DIVIDE ( [Room Revenue], [Rooms Sold] )
+
+// Occupancy - rooms sold over rooms AVAILABLE.
+Historical Occupancy =
+DIVIDE ( [Rooms Sold], [Historical Capacity] )
+
+// RevPAR - revenue per available room. The metric hotels actually manage to,
+// because it punishes selling cheap AND leaving rooms empty.
+// Note RevPAR = ADR x Occupancy, but computing it directly from the sums is
+// safer: the identity only holds when both components use the same filter.
+RevPAR =
+DIVIDE ( [Room Revenue], [Historical Capacity] )
+
+
+// ---------------------------------------------------------------------------
+// 4. RATE MEASURES
+// ---------------------------------------------------------------------------
+
+// Weighted by capacity, so a 154-room block moves this more than a 13-room
+// suite. An unweighted AVERAGE would misrepresent the portfolio.
+Current Rate =
+DIVIDE (
+    SUMX ( fact_recommendation,
+           fact_recommendation[current_rate] * fact_recommendation[capacity] ),
+    [Capacity]
+)
+
+Recommended Rate =
+DIVIDE (
+    SUMX ( fact_recommendation,
+           fact_recommendation[recommended_rate] * fact_recommendation[capacity] ),
+    [Capacity]
+)
+
+Rate Change % =
+DIVIDE ( [Recommended Rate] - [Current Rate], [Current Rate] )
+
+Mean Elasticity =
+AVERAGE ( fact_recommendation[elasticity] )
+
+
+// ---------------------------------------------------------------------------
+// 5. COUNTS AND SHARES
+// ---------------------------------------------------------------------------
+
+Nights Priced =
+COUNTROWS ( fact_recommendation )
+
+Stay Dates =
+DISTINCTCOUNT ( fact_recommendation[stay_date] )
+
+Rate Increases =
+CALCULATE ( [Nights Priced],
+            fact_recommendation[action] = "Increase" )
+
+Rate Decreases =
+CALCULATE ( [Nights Priced],
+            fact_recommendation[action] = "Decrease" )
+
+// % of recommendations sitting ON a policy cap rather than at an economic
+// optimum. Over half of ours do - that is a finding to escalate, since it
+// says the +/-15% band is the binding constraint on revenue.
+Constrained by Policy % =
+DIVIDE (
+    CALCULATE ( [Nights Priced],
+                fact_recommendation[constraint_binding] <> "none - interior optimum" ),
+    [Nights Priced]
+)
+
+// Nights where several candidate rates land within 1% of best revenue.
+// High values mean the optimum is flat, so recommendations should be read
+// as ranges rather than precise figures.
+Flat Optimum % =
+DIVIDE (
+    CALCULATE ( [Nights Priced], fact_recommendation[is_flat_optimum] = TRUE() ),
+    [Nights Priced]
+)
+
+
+// ---------------------------------------------------------------------------
+// 6. WHAT-IF SIMULATOR  (fact_scenario)
+// ---------------------------------------------------------------------------
+// Setup: Modeling > New Parameter > Numeric range
+//   Name: Rate Adjustment
+//   Min -20, Max 25, Increment 2.5, Default 0
+// That creates a disconnected table and a "Rate Adjustment Value" measure.
+// Disconnected means no relationship to the facts, so the slicer filters
+// nothing directly - these measures read its value explicitly instead.
+
+Scenario Revenue =
+VAR Adjustment = SELECTEDVALUE ( 'Rate Adjustment'[Rate Adjustment], 0 )
+VAR Nearest =
+    MINX (
+        VALUES ( fact_scenario[rate_change_pct] ),
+        ABS ( fact_scenario[rate_change_pct] - Adjustment )
+    )
+RETURN
+    CALCULATE (
+        SUM ( fact_scenario[expected_revenue] ),
+        FILTER (
+            fact_scenario,
+            ABS ( fact_scenario[rate_change_pct] - Adjustment ) = Nearest
+        )
+    )
+
+Scenario Pickup =
+VAR Adjustment = SELECTEDVALUE ( 'Rate Adjustment'[Rate Adjustment], 0 )
+VAR Nearest =
+    MINX (
+        VALUES ( fact_scenario[rate_change_pct] ),
+        ABS ( fact_scenario[rate_change_pct] - Adjustment )
+    )
+RETURN
+    CALCULATE (
+        SUM ( fact_scenario[expected_pickup] ),
+        FILTER (
+            fact_scenario,
+            ABS ( fact_scenario[rate_change_pct] - Adjustment ) = Nearest
+        )
+    )
+
+Scenario vs Current =
+VAR AtCurrent =
+    CALCULATE ( SUM ( fact_scenario[expected_revenue] ),
+                fact_scenario[rate_multiplier] = 1 )
+RETURN
+    [Scenario Revenue] - AtCurrent
+
+
+// ---------------------------------------------------------------------------
+// 7. CONDITIONAL FORMATTING HELPERS
+// ---------------------------------------------------------------------------
+// Use under Format > Cell elements > Background color > Field value.
+
+Action Colour =
+SWITCH (
+    SELECTEDVALUE ( fact_recommendation[action] ),
+    "Increase", "#2E5E4E",
+    "Decrease", "#B4472A",
+    "#9AA0A6"
+)
+
+Uplift Label =
+VAR Value = [Revenue Uplift]
+RETURN
+    IF ( ISBLANK ( Value ), "-", FORMAT ( Value, "$#,##0" ) )
+
+
+// ---------------------------------------------------------------------------
+// 8. MODEL PERFORMANCE PAGE  (model_metrics)
+// ---------------------------------------------------------------------------
+
+Metric Value =
+SUM ( model_metrics[value] )
+
+Elasticity Error =
+VAR Estimated =
+    CALCULATE ( [Metric Value], model_metrics[metric] = "estimated" )
+VAR Truth =
+    CALCULATE ( [Metric Value], model_metrics[metric] = "true" )
+RETURN
+    ABS ( Estimated - Truth )

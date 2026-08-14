@@ -1,0 +1,106 @@
+category,item,metric,value
+Demand model,Poisson GLM,MAE,0.6631
+Demand model,Poisson GLM,RMSE,1.0227
+Demand model,Poisson GLM,poisson_deviance,0.9472
+Demand model,Poisson GLM,night_MAE,9.117
+Demand model,Poisson GLM,fit_seconds,7.9
+Demand model,Random Forest,MAE,0.6123
+Demand model,Random Forest,RMSE,0.9492
+Demand model,Random Forest,poisson_deviance,0.8432
+Demand model,Random Forest,night_MAE,5.428
+Demand model,Random Forest,fit_seconds,23.0
+Demand model,XGBoost,MAE,0.6102
+Demand model,XGBoost,RMSE,0.945
+Demand model,XGBoost,poisson_deviance,0.8379
+Demand model,XGBoost,night_MAE,5.436
+Demand model,XGBoost,fit_seconds,7.4
+Demand model,CatBoost,MAE,0.6115
+Demand model,CatBoost,RMSE,0.9489
+Demand model,CatBoost,poisson_deviance,0.84
+Demand model,CatBoost,night_MAE,5.586
+Demand model,CatBoost,fit_seconds,44.5
+Elasticity,HTL001 / RT_DLX,estimated,-1.1624431657900924
+Elasticity,HTL001 / RT_DLX,true,-1.4015
+Elasticity,HTL001 / RT_DLX,ci_low,-1.4408276155471864
+Elasticity,HTL001 / RT_DLX,ci_high,-0.8840587160329985
+Elasticity,HTL001 / RT_STD,estimated,-1.8232717910231384
+Elasticity,HTL001 / RT_STD,true,-1.6985
+Elasticity,HTL001 / RT_STD,ci_low,-1.952881704887696
+Elasticity,HTL001 / RT_STD,ci_high,-1.693661877158581
+Elasticity,HTL001 / RT_STE,estimated,-0.7649974533567527
+Elasticity,HTL001 / RT_STE,true,-1.0577
+Elasticity,HTL001 / RT_STE,ci_low,-1.1362409679629395
+Elasticity,HTL001 / RT_STE,ci_high,-0.3937539387505661
+Elasticity,HTL002 / RT_DLX,estimated,-1.4281524218138293
+Elasticity,HTL002 / RT_DLX,true,-1.4259
+Elasticity,HTL002 / RT_DLX,ci_low,-1.7475903410376656
+Elasticity,HTL002 / RT_DLX,ci_high,-1.108714502589993
+Elasticity,HTL002 / RT_STD,estimated,-1.8159054301611648
+Elasticity,HTL002 / RT_STD,true,-1.7769
+Elasticity,HTL002 / RT_STD,ci_low,-2.039293225568241
+Elasticity,HTL002 / RT_STD,ci_high,-1.592517634754088
+Elasticity,HTL002 / RT_STE,estimated,-1.10876359603183
+Elasticity,HTL002 / RT_STE,true,-1.1274
+Elasticity,HTL002 / RT_STE,ci_low,-1.5901757457872503
+Elasticity,HTL002 / RT_STE,ci_high,-0.6273514462764096
+Elasticity,HTL003 / RT_DLX,estimated,-2.023917883910018
+Elasticity,HTL003 / RT_DLX,true,-1.7115
+Elasticity,HTL003 / RT_DLX,ci_low,-2.2650304342084016
+Elasticity,HTL003 / RT_DLX,ci_high,-1.7828053336116347
+Elasticity,HTL003 / RT_STD,estimated,-2.068844023613565
+Elasticity,HTL003 / RT_STD,true,-2.0017
+Elasticity,HTL003 / RT_STD,ci_low,-2.246178012760503
+Elasticity,HTL003 / RT_STD,ci_high,-1.8915100344666265
+Elasticity,HTL003 / RT_STE,estimated,-1.22166384587733
+Elasticity,HTL003 / RT_STE,true,-1.1601
+Elasticity,HTL003 / RT_STE,ci_low,-1.5866219737537433
+Elasticity,HTL003 / RT_STE,ci_high,-0.8567057180009165
+Elasticity,HTL004 / RT_DLX,estimated,-1.3034236228509617
+Elasticity,HTL004 / RT_DLX,true,-1.3418
+Elasticity,HTL004 / RT_DLX,ci_low,-1.6319600551344922
+Elasticity,HTL004 / RT_DLX,ci_high,-0.9748871905674312
+Elasticity,HTL004 / RT_STD,estimated,-1.7374046621364547
+Elasticity,HTL004 / RT_STD,true,-1.5858
+Elasticity,HTL004 / RT_STD,ci_low,-2.041207996431211
+Elasticity,HTL004 / RT_STD,ci_high,-1.4336013278416986
+Elasticity,HTL004 / RT_STE,estimated,-1.387627585011088
+Elasticity,HTL004 / RT_STE,true,-1.0264
+Elasticity,HTL004 / RT_STE,ci_low,-1.908880119650164
+Elasticity,HTL004 / RT_STE,ci_high,-0.8663750503720118
+Elasticity,HTL005 / RT_DLX,estimated,-1.6566349374656666
+Elasticity,HTL005 / RT_DLX,true,-1.6652
+Elasticity,HTL005 / RT_DLX,ci_low,-1.930335997584594
+Elasticity,HTL005 / RT_DLX,ci_high,-1.3829338773467392
+Elasticity,HTL005 / RT_STD,estimated,-1.7796439571160287
+Elasticity,HTL005 / RT_STD,true,-1.9185
+Elasticity,HTL005 / RT_STD,ci_low,-2.000754069577827
+Elasticity,HTL005 / RT_STD,ci_high,-1.5585338446542305
+Elasticity,HTL005 / RT_STE,estimated,-1.2574339096473273
+Elasticity,HTL005 / RT_STE,true,-1.1615
+Elasticity,HTL005 / RT_STE,ci_low,-1.6454961412126918
+Elasticity,HTL005 / RT_STE,ci_high,-0.8693716780819627
+Robustness,1. Poisson | rate tests | available rows  [PREFERRED],mean_elasticity,-1.503
+Robustness,1. Poisson | rate tests | available rows  [PREFERRED],MAE_vs_truth,0.13
+Robustness,2. log-OLS dropping zero-pickup rows,mean_elasticity,-0.518
+Robustness,2. log-OLS dropping zero-pickup rows,MAE_vs_truth,0.953
+Robustness,3. Keeping censored (sold-out) rows,mean_elasticity,-0.932
+Robustness,3. Keeping censored (sold-out) rows,MAE_vs_truth,0.538
+Robustness,"4. Observational data, no rate tests",mean_elasticity,-0.412
+Robustness,"4. Observational data, no rate tests",MAE_vs_truth,1.059
+Robustness,5. PLACEBO: fake randomization on legacy rates,mean_elasticity,1.197
+Robustness,5. PLACEBO: fake randomization on legacy rates,MAE_vs_truth,2.667
+SHAP,Typical demand for this night/lead time,pace / demand history,1.0104569
+SHAP,Occupancy on the books,pace / demand history,0.11843101
+SHAP,Rooms already sold,pace / demand history,0.08515299
+SHAP,Bookings last 7 days,pace / demand history,0.079313286
+SHAP,Room type capacity,calendar / hotel,0.050130147
+SHAP,Rooms still available,pace / demand history,0.043421123
+SHAP,Rate vs competitors,price,0.040523775
+SHAP,Bookings last 3 days,pace / demand history,0.024746818
+SHAP,Typical occupancy at this lead time,pace / demand history,0.024024539
+SHAP,% of inventory unsold,pace / demand history,0.012515318
+SHAP,Pace ratio vs normal,pace / demand history,0.0117110135
+SHAP,Rate vs reference rate,price,0.010357541
+SHAP,Our rate,price,0.01013262
+SHAP,Days before arrival,calendar / hotel,0.007890722
+SHAP,Doy cos,calendar / hotel,0.007177121

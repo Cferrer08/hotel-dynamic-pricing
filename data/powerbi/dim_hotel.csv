@@ -1,0 +1,6 @@
+hotel_id,hotel_name,city,segment,star_rating,total_rooms
+HTL001,Harborview Grand,Boston,Business,4,220
+HTL002,Lakeside Inn,Chicago,Mixed,3,140
+HTL003,Beachcomber Resort,Miami,Leisure,4,260
+HTL004,Metro Central,New York,Business,3,180
+HTL005,Canyon Lodge,Denver,Leisure,4,160

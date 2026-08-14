@@ -1,0 +1,5 @@
+strategy,mean_rate_change_pct,revenue,profit
+Revenue max (point estimate),-8.3,11527295,9301382
+Profit max  (point estimate),-4.77,11497555,9311250
+Revenue max (CI upper bound),0.14,11376641,9248401
+Do nothing (current rates),0.0,10509876,8640544

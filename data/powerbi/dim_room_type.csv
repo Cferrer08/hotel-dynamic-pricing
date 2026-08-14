@@ -1,0 +1,4 @@
+room_type_id,room_type_name,rate_index,sort_order
+RT_STD,Standard,1.0,1
+RT_DLX,Deluxe,1.35,2
+RT_STE,Suite,2.05,3
