@@ -25,13 +25,13 @@ Uplift            : $1,025,007 (+9.78%)
 
 1. Open **Power BI Desktop** → **Get Data** → **Text/CSV**
 2. Load all eight files from `data\powerbi\`:
-   `dim_hotel`, `dim_room_type`, `dim_date`, `fact_recommendation`,
+  `dim_hotel`, `dim_room_type`, `dim_date`, `fact_recommendation`,
    `fact_scenario`, `fact_history`, `model_metrics`, `strategy_comparison`
 3. For each, click **Transform Data** rather than Load, and check the column types
-   in Power Query. Power BI guesses, and it guesses wrong on dates roughly half the
+  in Power Query. Power BI guesses, and it guesses wrong on dates roughly half the
    time.
 4. Confirm `stay_date` and `date` are **Date**, not Text. Fix via right-click →
-   **Change Type** → **Date**.
+  **Change Type** → **Date**.
 5. **Close & Apply**
 
 > **Why not connect straight to PostgreSQL?** You can — Get Data → PostgreSQL,
@@ -42,23 +42,27 @@ Uplift            : $1,025,007 (+9.78%)
 
 ---
 
+
+
 ## Step 2 — Build the model
 
 Go to **Model view** (left sidebar, third icon).
 
 Create these relationships by dragging field to field:
 
-| From | To | Cardinality | Direction |
-|---|---|---|---|
-| `dim_hotel[hotel_id]` | `fact_recommendation[hotel_id]` | One to many | Single |
-| `dim_hotel[hotel_id]` | `fact_history[hotel_id]` | One to many | Single |
-| `dim_hotel[hotel_id]` | `fact_scenario[hotel_id]` | One to many | Single |
-| `dim_room_type[room_type_id]` | `fact_recommendation[room_type_id]` | One to many | Single |
-| `dim_room_type[room_type_id]` | `fact_history[room_type_id]` | One to many | Single |
-| `dim_room_type[room_type_id]` | `fact_scenario[room_type_id]` | One to many | Single |
-| `dim_date[date]` | `fact_recommendation[stay_date]` | One to many | Single |
-| `dim_date[date]` | `fact_history[stay_date]` | One to many | Single |
-| `dim_date[date]` | `fact_scenario[stay_date]` | One to many | Single |
+
+| From                          | To                                  | Cardinality | Direction |
+| ----------------------------- | ----------------------------------- | ----------- | --------- |
+| `dim_hotel[hotel_id]`         | `fact_recommendation[hotel_id]`     | One to many | Single    |
+| `dim_hotel[hotel_id]`         | `fact_history[hotel_id]`            | One to many | Single    |
+| `dim_hotel[hotel_id]`         | `fact_scenario[hotel_id]`           | One to many | Single    |
+| `dim_room_type[room_type_id]` | `fact_recommendation[room_type_id]` | One to many | Single    |
+| `dim_room_type[room_type_id]` | `fact_history[room_type_id]`        | One to many | Single    |
+| `dim_room_type[room_type_id]` | `fact_scenario[room_type_id]`       | One to many | Single    |
+| `dim_date[date]`              | `fact_recommendation[stay_date]`    | One to many | Single    |
+| `dim_date[date]`              | `fact_history[stay_date]`           | One to many | Single    |
+| `dim_date[date]`              | `fact_scenario[stay_date]`          | One to many | Single    |
+
 
 **Then mark the date table.** Select `dim_date` → **Table tools** → **Mark as date
 table** → choose `date`. Without this, time intelligence functions silently return
@@ -79,10 +83,12 @@ schema from Phase 2 maps onto this directly — that groundwork pays off here.
 
 ---
 
+
+
 ## Step 3 — Add the measures
 
 1. **Home** → **Enter Data** → name the table `_Measures` → **Load**
-   (delete the placeholder column; an empty table is fine)
+  (delete the placeholder column; an empty table is fine)
 2. Open `dashboard\powerbi_measures.dax`
 3. For each measure: **Modeling** → **New Measure**, paste, press Enter
 4. In the field list, drag each new measure into `_Measures`
@@ -110,28 +116,35 @@ precomputed `occupancy_pct` column. Exporting the ratio invites the mistake.
 
 ---
 
+
+
 ## Step 4 — Page 1: Executive overview
 
 **Cards** (Insert → Card), across the top:
 
-| Card | Measure | Format |
-|---|---|---|
-| Nights priced | `Nights Priced` | whole number |
-| Revenue at current rates | `Baseline Revenue` | currency, 2 decimals, millions |
-| Revenue if optimized | `Optimized Revenue` | currency |
-| Opportunity | `Revenue Uplift` | currency |
-| Uplift % | `Revenue Uplift %` | percentage, 1 decimal |
+
+| Card                     | Measure             | Format                         |
+| ------------------------ | ------------------- | ------------------------------ |
+| Nights priced            | `Nights Priced`     | whole number                   |
+| Revenue at current rates | `Baseline Revenue`  | currency, 2 decimals, millions |
+| Revenue if optimized     | `Optimized Revenue` | currency                       |
+| Opportunity              | `Revenue Uplift`    | currency                       |
+| Uplift %                 | `Revenue Uplift %`  | percentage, 1 decimal          |
+
 
 **Line chart** — opportunity over time:
+
 - X axis: `dim_date[date]`
 - Y axis: `Baseline Revenue` and `Optimized Revenue`
 - Title: "Revenue at stake by stay date"
 
 **Clustered bar** — where the opportunity sits:
+
 - Y axis: `fact_recommendation[occupancy_band]`
 - X axis: `Revenue Uplift`
 
 **Table** — portfolio performance:
+
 - Rows: `dim_hotel[hotel_name]`
 - Values: `ADR`, `Historical Occupancy`, `RevPAR`
 - Sort by RevPAR descending
@@ -149,20 +162,24 @@ precomputed `occupancy_pct` column. Exporting the ratio invites the mistake.
 
 ---
 
+
+
 ## Step 5 — Page 2: Recommendations
 
 **Table** — the main grid:
 
-| Column | Source |
-|---|---|
-| Stay date | `fact_recommendation[stay_date]` |
-| Hotel | `dim_hotel[hotel_name]` |
-| Room type | `dim_room_type[room_type_name]` |
-| Current | `Current Rate` |
-| Recommended | `Recommended Rate` |
-| Change % | `Rate Change %` |
-| Occupancy | `Occupancy On Books` |
-| Uplift | `Revenue Uplift` |
+
+| Column      | Source                           |
+| ----------- | -------------------------------- |
+| Stay date   | `fact_recommendation[stay_date]` |
+| Hotel       | `dim_hotel[hotel_name]`          |
+| Room type   | `dim_room_type[room_type_name]`  |
+| Current     | `Current Rate`                   |
+| Recommended | `Recommended Rate`               |
+| Change %    | `Rate Change %`                  |
+| Occupancy   | `Occupancy On Books`             |
+| Uplift      | `Revenue Uplift`                 |
+
 
 **Round rates to whole dollars.** Select the column → **Format** → 0 decimal places.
 Phase 7 found the revenue optimum is flat — on 68% of nights, three or more candidate
@@ -178,26 +195,26 @@ Format → Cell elements → Background color → Format style: **Field value** 
 **Slicer** on `fact_recommendation[action]` (Increase / Decrease / Hold).
 
 **Detail panel** — select a row and these update:
+
 - Cards: `Mean Elasticity`, `Occupancy On Books`, `Cost of Inaction`
 - Line chart from `fact_scenario`: X = `rate`, Y = `expected_revenue`, filtered to
-  the selected night
+the selected night
 
 To make the chart respond to table selection, select the table →
 **Format** → **Edit interactions** → set the chart to **Filter**.
 
 ---
 
+
+
 ## Step 6 — Page 3: Rate simulator
 
 1. **Modeling** → **New Parameter** → **Numeric range**
-   - Name: `Rate Adjustment`
-   - Minimum −20, Maximum 25, Increment 2.5, Default 0
-   - Tick "Add slicer to this page"
-
+  - Name: `Rate Adjustment`
+  - Minimum −20, Maximum 25, Increment 2.5, Default 0
+  - Tick "Add slicer to this page"
 2. Add cards: `Scenario Revenue`, `Scenario Pickup`, `Scenario vs Current`
-
 3. Add slicers for hotel, room type, and stay date so a single night is selected
-
 4. Line chart from `fact_scenario`: X = `rate`, Y = `expected_revenue`
 
 The parameter creates a **disconnected table** — no relationship to the facts, so the
@@ -208,20 +225,25 @@ filter.
 
 ---
 
+
+
 ## Step 7 — Page 4: Model performance
 
 All visuals read `model_metrics`, filtered by its `category` column.
 
 **Demand models** — bar chart:
+
 - Filter: `category = "Demand model"`, `metric = "poisson_deviance"`
 - Axis: `item`, Value: `Metric Value`
 
 **Elasticity recovery** — scatter:
+
 - Filter: `category = "Elasticity"`
 - This needs a small reshape; simplest is a matrix with `item` on rows and `metric`
-  on columns, values `Metric Value`
+on columns, values `Metric Value`
 
 **Robustness** — bar chart:
+
 - Filter: `category = "Robustness"`, `metric = "mean_elasticity"`
 - Add a constant line at −1.471 (the true value)
 
@@ -230,10 +252,13 @@ non-randomized rates labelled as an experiment returns the **wrong sign** — wh
 what proves the result comes from the experimental design rather than the estimator.
 
 **SHAP drivers** — horizontal bar:
+
 - Filter: `category = "SHAP"`
 - Axis: `item`, Value: `Metric Value`, Legend: `metric`
 
 ---
+
+
 
 ## Step 8 — Polish
 
@@ -242,6 +267,8 @@ what proves the result comes from the experimental design rather than the estima
 - **View** → **Page view** → **Fit to page**
 - **File** → **Options** → **Report settings** → tick "Enable persistent filters"
 - Save as `dashboard\hotel_pricing.pbix`
+
+
 
 ### Publishing (optional)
 
@@ -254,19 +281,23 @@ in the repo is the artefact that proves you built it.
 
 ---
 
+
+
 ## Reconciliation check
 
 Before you call it finished, confirm these match the Streamlit dashboard exactly:
 
-| Measure | Expected |
-|---|---|
-| Nights Priced | 885 |
-| Baseline Revenue | $10,483,387 |
-| Optimized Revenue | $11,508,395 |
-| Revenue Uplift % | +9.78% |
-| Historical Occupancy | 82.1% |
-| ADR | $290.30 |
-| RevPAR | $238.30 |
+
+| Measure              | Expected    |
+| -------------------- | ----------- |
+| Nights Priced        | 885         |
+| Baseline Revenue     | $10,483,387 |
+| Optimized Revenue    | $11,508,395 |
+| Revenue Uplift %     | +9.78%      |
+| Historical Occupancy | 82.1%       |
+| ADR                  | $290.30     |
+| RevPAR               | $238.30     |
+
 
 If occupancy comes out near 1.4%, you have summed `capacity` across booking-date rows
 — the fan-out bug from Phase 3. The export already aggregates to the correct grain,
@@ -274,14 +305,16 @@ so this should not happen, but it is the first thing to check if a ratio looks a
 
 ---
 
+
+
 ## Why build both dashboards
 
 Worth a line in your README, because "I built the same thing twice" needs a reason:
 
 - **Streamlit** — Python-native, version-controlled, runs the models directly.
-  What a data scientist ships.
+What a data scientist ships.
 - **Power BI** — what most organisations actually have deployed, and what business
-  users can self-serve from.
+users can self-serve from.
 
 Both read the same outputs and produce identical numbers. That reconciliation is
 itself the point: the analysis lives in the pipeline, not in the presentation layer.
